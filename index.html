@@ -139,10 +139,11 @@
         
         <div class="player">
             <audio controls id="radioPlayer" preload="auto" crossorigin="anonymous">
-                <source src="https://uk21freenew.listen2myradio.com:30812/stream" type="audio/mpeg">
-                <source src="https://rockea.radio12345.com" type="audio/mpeg">
-                <source src="https://rockea.radiostream321.com" type="audio/mpeg">
-                <!-- Fallback a HTTP si HTTPS no funciona -->
+                <!-- Usar proxy CORS para HTTP -->
+                <source src="https://cors-anywhere.herokuapp.com/http://uk21freenew.listen2myradio.com:30812/stream" type="audio/mpeg">
+                <source src="https://cors-anywhere.herokuapp.com/http://rockea.radio12345.com" type="audio/mpeg">
+                <source src="https://cors-anywhere.herokuapp.com/http://rockea.radiostream321.com" type="audio/mpeg">
+                <!-- Fallback directo -->
                 <source src="http://uk21freenew.listen2myradio.com:30812/stream" type="audio/mpeg">
                 <source src="http://rockea.radio12345.com" type="audio/mpeg">
                 <source src="http://rockea.radiostream321.com" type="audio/mpeg">
@@ -209,9 +210,9 @@
             
             // Intentar siguiente fuente
             const sources = [
-                'https://uk21freenew.listen2myradio.com:30812/stream',
-                'https://rockea.radio12345.com',
-                'https://rockea.radiostream321.com',
+                'https://cors-anywhere.herokuapp.com/http://uk21freenew.listen2myradio.com:30812/stream',
+                'https://cors-anywhere.herokuapp.com/http://rockea.radio12345.com',
+                'https://cors-anywhere.herokuapp.com/http://rockea.radiostream321.com',
                 'http://uk21freenew.listen2myradio.com:30812/stream',
                 'http://rockea.radio12345.com',
                 'http://rockea.radiostream321.com'
