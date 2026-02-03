@@ -138,12 +138,7 @@
         <div class="frequency">Streaming Online</div>
         
         <div class="player">
-            <audio controls id="radioPlayer" preload="auto" crossorigin="anonymous">
-                <!-- Usar proxy CORS para HTTP -->
-                <source src="https://cors-anywhere.herokuapp.com/http://uk21freenew.listen2myradio.com:30812/stream" type="audio/mpeg">
-                <source src="https://cors-anywhere.herokuapp.com/http://rockea.radio12345.com" type="audio/mpeg">
-                <source src="https://cors-anywhere.herokuapp.com/http://rockea.radiostream321.com" type="audio/mpeg">
-                <!-- Fallback directo -->
+            <audio controls id="radioPlayer" preload="auto">
                 <source src="http://uk21freenew.listen2myradio.com:30812/stream" type="audio/mpeg">
                 <source src="http://rockea.radio12345.com" type="audio/mpeg">
                 <source src="http://rockea.radiostream321.com" type="audio/mpeg">
@@ -210,9 +205,6 @@
             
             // Intentar siguiente fuente
             const sources = [
-                'https://cors-anywhere.herokuapp.com/http://uk21freenew.listen2myradio.com:30812/stream',
-                'https://cors-anywhere.herokuapp.com/http://rockea.radio12345.com',
-                'https://cors-anywhere.herokuapp.com/http://rockea.radiostream321.com',
                 'http://uk21freenew.listen2myradio.com:30812/stream',
                 'http://rockea.radio12345.com',
                 'http://rockea.radiostream321.com'
@@ -222,7 +214,7 @@
             if (currentIndex < sources.length - 1) {
                 audio.src = sources[currentIndex + 1];
                 audio.load();
-                status.textContent = `🔄 Intentando conexión ${currentIndex + 2}/6...`;
+                status.textContent = `🔄 Intentando conexión ${currentIndex + 2}/3...`;
             }
         });
         
