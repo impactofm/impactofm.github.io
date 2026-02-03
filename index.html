@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FM Energy 106 - Radio Online</title>
+    <title>Rockea Radio - Radio Online</title>
     <style>
         * {
             margin: 0;
@@ -13,7 +13,7 @@
 
         body {
             font-family: 'Arial', sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
             min-height: 100vh;
             display: flex;
             justify-content: center;
@@ -106,6 +106,14 @@
             opacity: 0.8;
         }
 
+        .stream-info {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 15px;
+            margin-top: 20px;
+            font-size: 0.8em;
+        }
+
         @media (max-width: 600px) {
             .radio-container {
                 padding: 20px;
@@ -124,53 +132,90 @@
 </head>
 <body>
     <div class="radio-container">
-        <img src="logo.jpg" alt="FM Energy 106 Logo" class="logo">
+        <img src="logo.jpg" alt="Rockea Radio Logo" class="logo">
         
-        <h1>FM Energy 106</h1>
-        <div class="frequency">106.7 MHz - Coronel Suárez, Buenos Aires</div>
+        <h1>Rockea Radio</h1>
+        <div class="frequency">Streaming Online</div>
         
         <div class="player">
-            <audio controls id="radioPlayer">
-                <source src="https://stream.zeno.fm/8rtrnqy8pz8tv" type="audio/mpeg">
-                <source src="https://fmenergy106.com.ar/stream" type="audio/mpeg">
+            <audio controls id="radioPlayer" preload="auto">
+                <source src="http://uk21freenew.listen2myradio.com:30812/stream" type="audio/mpeg">
+                <source src="http://rockea.radio12345.com" type="audio/mpeg">
+                <source src="http://rockea.radiostream321.com" type="audio/mpeg">
                 Tu navegador no soporta la reproducción de audio.
             </audio>
+            <button id="retryButton" style="margin-top: 10px; padding: 10px 20px; background: #e60073; color: white; border: none; border-radius: 5px; cursor: pointer;">Reintentar Conexión</button>
         </div>
         
+        <div class="status" id="status">
+            🎵 Rockea Radio - La mejor música rock
+        </div>
+        
+        <div class="stream-info">
+            <p><strong>Stream:</strong> uk21freenew.listen2myradio.com:30812</p>
+            <p><strong>Estado:</strong> 🟢 ONLINE</p>
+        </div>
         
         <div class="info">
             <p>Escúchanos online en cualquier lugar del mundo</p>
-            <p>www.fmenergy106.com.ar</p>
+            <p>rockea.radio12345.com</p>
         </div>
     </div>
 
     <script>
         const audio = document.getElementById('radioPlayer');
         const status = document.getElementById('status');
+        const retryButton = document.getElementById('retryButton');
         
-        // Intentar cargar la primera fuente
-        audio.load();
+        // Función para intentar reproducir
+        function tryPlay() {
+            audio.play().then(() => {
+                status.textContent = '🎧 Reproduciendo Rockea Radio...';
+                status.classList.add('playing');
+            }).catch(error => {
+                console.error("Error al reproducir:", error);
+                status.textContent = '👆 Haz clic en play para comenzar';
+            });
+        }
+        
+        // Evento del botón de reintentar
+        retryButton.addEventListener('click', () => {
+            status.textContent = '🔄 Reconectando...';
+            audio.load();
+            setTimeout(tryPlay, 1000);
+        });
         
         // Eventos del reproductor
         audio.addEventListener('play', () => {
-            status.textContent = '🎧 Sintonizando FM Energy 106...';
+            status.textContent = '🎧 Reproduciendo Rockea Radio...';
             status.classList.add('playing');
+            retryButton.style.display = 'none';
         });
         
         audio.addEventListener('pause', () => {
             status.textContent = '⏸️ Pausado';
             status.classList.remove('playing');
+            retryButton.style.display = 'block';
         });
         
-        audio.addEventListener('error', () => {
+        audio.addEventListener('error', (e) => {
+            console.error('Error de audio:', e);
             status.textContent = '❌ Error al cargar la transmisión';
             status.classList.remove('playing');
+            retryButton.style.display = 'block';
             
-            // Intentar con la segunda fuente
-            if (audio.src.includes('zeno.fm')) {
-                audio.src = 'https://fmenergy106.com.ar/stream';
+            // Intentar siguiente fuente
+            const sources = [
+                'http://uk21freenew.listen2myradio.com:30812/stream',
+                'http://rockea.radio12345.com',
+                'http://rockea.radiostream321.com'
+            ];
+            
+            const currentIndex = sources.findIndex(src => audio.src.includes(src));
+            if (currentIndex < sources.length - 1) {
+                audio.src = sources[currentIndex + 1];
                 audio.load();
-                status.textContent = '🔄 Intentando conexión alternativa...';
+                status.textContent = `🔄 Intentando conexión ${currentIndex + 2}/3...`;
             }
         });
         
@@ -178,10 +223,16 @@
             status.textContent = '⏳ Cargando transmisión...';
         });
         
-
+        audio.addEventListener('canplay', () => {
+            if (audio.paused) {
+                tryPlay();
+            }
+        });
         
- 
- 
+        // Intentar reproducir al cargar la página
+        window.addEventListener('load', () => {
+            setTimeout(tryPlay, 2000);
+        });
     </script>
 </body>
 </html>
